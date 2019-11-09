@@ -26,7 +26,7 @@ export class Dashboard extends React.Component<{}, { notes: Note[], currentNote:
     newStickyNote = (event: React.MouseEvent) => {
         const id = this.state.notes.length + 1
         this.save({
-            id: id,
+            id: 0,
             contents: "",
             top: event.clientY,
             left: event.clientX
@@ -34,6 +34,8 @@ export class Dashboard extends React.Component<{}, { notes: Note[], currentNote:
 
         event.preventDefault()
     }
+
+    editNote = (note: Note) => this.setState({ currentNote: note })
 
     render() {
         return <div
@@ -49,6 +51,8 @@ export class Dashboard extends React.Component<{}, { notes: Note[], currentNote:
             {this.state.notes.map(note => <StickyNote
                 key={note.id}
                 note={note}
+                currentNote={this.state.currentNote}
+                editNote={this.editNote}
                 save={this.save} />)}
         </div>
     }

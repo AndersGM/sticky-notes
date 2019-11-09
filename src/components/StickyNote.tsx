@@ -2,11 +2,10 @@ import * as React from "react";
 import { Note } from "../models/Note";
 import './StickyNote.css';
 
-export default class StickyNote extends React.Component<{ note: Note, save: Function }, { isEditing: boolean, contents: string, left: number, top: number }> {
+export default class StickyNote extends React.Component<{ note: Note, save: Function, currentNote: Note | null, editNote: Function }, { contents: string, left: number, top: number }> {
     constructor(props: any) {
         super(props)
         this.state = {
-            isEditing: false,
             contents: this.props.note.contents,
             top: this.props.note.top,
             left: this.props.note.left
@@ -14,7 +13,7 @@ export default class StickyNote extends React.Component<{ note: Note, save: Func
     }
 
     togglEditing = () => {
-        this.setState({ isEditing: !this.state.isEditing });
+        this.props.currentNote && this.props.currentNote.id === this.props.note.id ? this.props.editNote(null) : this.props.editNote(this.props.note)
     }
 
     handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -29,7 +28,7 @@ export default class StickyNote extends React.Component<{ note: Note, save: Func
         note.top = this.state.top
         note.left = this.state.left
         this.props.save(note)
-        this.setState({ isEditing: false })
+        this.props.editNote(null)
     }
 
     cancel = () => {
@@ -61,7 +60,7 @@ export default class StickyNote extends React.Component<{ note: Note, save: Func
     }
 
     edit = (event: React.MouseEvent) => {
-        this.setState({ isEditing: true })
+        this.props.editNote(this.props.note)
         event.stopPropagation()
         event.preventDefault()
     }
@@ -77,7 +76,7 @@ export default class StickyNote extends React.Component<{ note: Note, save: Func
         >
             <div onMouseDown={this.mouseDown} className="sticky-note-header">Note</div>
 
-            {this.state.isEditing ? <div className="sticky-note-editarea">
+            {this.props.currentNote === this.props.note ? <div className="sticky-note-editarea">
                 <textarea
                     name="contents"
                     value={this.state.contents}

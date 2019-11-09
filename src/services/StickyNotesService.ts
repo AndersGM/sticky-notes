@@ -7,7 +7,14 @@ class StickyNotesService {
     }
 
     save(note: Note) {
-        const notes = [...this.getStickyNotes().filter(filteredNote => filteredNote.id !== note.id), note]
+        if (note.id === 0) {
+            note.id = Math.max(...this.getStickyNotes().map(mappedNote => mappedNote.id)) + 1
+        }
+
+        const notes = [
+            ...this.getStickyNotes().filter(filteredNote => filteredNote.id !== note.id),
+            note
+        ]
         localStorage.setItem("stickyNotes", JSON.stringify(notes))
     }
 }
