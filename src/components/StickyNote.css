@@ -19,6 +19,7 @@
 .sticky-note .sticky-note-contents {
     width:100%;
     min-height:170px;
+    white-space: pre-wrap;
 }
 
 .sticky-note .sticky-note-editarea .sticky-note-actions {

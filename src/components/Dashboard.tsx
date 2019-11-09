@@ -1,30 +1,38 @@
 import * as React from "react"
 import { Note } from "../models/Note";
 import StickyNote from "./StickyNote";
+import stickyNotesService from "../services/StickyNotesService";
 
-export class Dashboard extends React.Component<{}, { notes: Note[] }>{
+export class Dashboard extends React.Component<{}, { notes: Note[], currentNote: Note | null }>{
     state = {
-        notes: [
-            { id: 1, contents: "Test note", left: 100, top: 100 },
-            { id: 2, contents: "Test note", left: 300, top: 300 }
-        ]
+        notes: [] as Note[],
+        currentNote: null
     }
 
-    save = (id: number) => (note: Note) => this.setState({
-        notes: [...this.state.notes.filter(note => note.id !== id), note]
-    })
+    save = (note: Note) => {
+        this.setState({
+            notes: [...this.state.notes.filter(filteredNote => filteredNote.id !== note.id), note]
+        })
+
+        stickyNotesService.save(note)
+    }
+
+    componentDidMount() {
+        this.setState({
+            notes: stickyNotesService.getStickyNotes()
+        })
+    }
 
     newStickyNote = (event: React.MouseEvent) => {
-        this.setState({
-            notes: [...this.state.notes, {
-                id: this.state.notes.length + 1,
-                contents: "",
-                top: event.clientY,
-                left: event.clientX
-            }]
-        });
+        const id = this.state.notes.length + 1
+        this.save({
+            id: id,
+            contents: "",
+            top: event.clientY,
+            left: event.clientX
+        })
 
-        event.preventDefault();
+        event.preventDefault()
     }
 
     render() {
@@ -41,7 +49,7 @@ export class Dashboard extends React.Component<{}, { notes: Note[] }>{
             {this.state.notes.map(note => <StickyNote
                 key={note.id}
                 note={note}
-                save={() => this.save(note.id)} />)}
+                save={this.save} />)}
         </div>
     }
 }
