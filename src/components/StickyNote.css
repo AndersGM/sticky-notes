@@ -1,0 +1,27 @@
+.sticky-note {
+    background-color: yellow;
+    position: absolute;
+    width: 200px;
+    height: 240px;
+}
+
+.sticky-note .sticky-note-header {
+    cursor: move;
+    padding: 5px;
+    font-size: 20px;
+}
+
+.sticky-note .sticky-note-editarea textarea {
+    min-height: 170px;
+    width: 100%;
+}
+
+.sticky-note .sticky-note-contents {
+    width:100%;
+    min-height:170px;
+}
+
+.sticky-note .sticky-note-editarea .sticky-note-actions {
+    height: 30px;
+    width: 100%;
+}
