@@ -9,6 +9,7 @@
     cursor: move;
     padding: 5px;
     font-size: 20px;
+    width: 100%;
 }
 
 .sticky-note .sticky-note-editarea textarea {
