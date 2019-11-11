@@ -2,6 +2,7 @@ import * as React from "react"
 import { Note } from "../models/Note";
 import StickyNote from "./StickyNote";
 import stickyNotesService from "../services/StickyNotesService";
+import "./Dashboard.css";
 
 export class Dashboard extends React.Component<{}, { notes: Note[], currentNote: Note | null }>{
     state = {
@@ -45,6 +46,20 @@ export class Dashboard extends React.Component<{}, { notes: Note[], currentNote:
     }
 
     render() {
+        let content
+        if (this.state.notes && this.state.notes.length > 0) {
+            content = this.state.notes.map(note => <StickyNote
+                key={note.id}
+                note={note}
+                currentNote={this.state.currentNote}
+                editNote={this.editNote}
+                removeNote={this.removeNote}
+                save={this.save} />)
+        } else {
+            content = <div className="help">
+                Double click to add note
+            </div>
+        }
         return <div
             onDoubleClick={this.newStickyNote}
             style={
@@ -55,13 +70,7 @@ export class Dashboard extends React.Component<{}, { notes: Note[], currentNote:
                 }
             }
         >
-            {this.state.notes.map(note => <StickyNote
-                key={note.id}
-                note={note}
-                currentNote={this.state.currentNote}
-                editNote={this.editNote}
-                removeNote={this.removeNote}
-                save={this.save} />)}
+            {content}
         </div>
     }
 }
